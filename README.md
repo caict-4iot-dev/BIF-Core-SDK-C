@@ -14,7 +14,7 @@ BIF-Core-SDK-C通过API调用的方式提供了星火链网-底层区块链平�
 
 ```c
 ## 1.拉取BIF-Core-SDK-C源码
-git clone https://github.com/caict-4iot-dev/BIF-Core-SDK.git
+git clone https://github.com/caict-4iot-dev/BIF-Core-SDK-C.git
 ## 2.编译与安装
 1) cd BIF-Core-SDK-C
 2) mkdir build && cd build
