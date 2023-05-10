@@ -1,31 +1,31 @@
-
 /*
  * © COPYRIGHT 2022 Corporation CAICT All rights reserved.
  *  http://www.caict.ac.cn
  *  https://bitfactory.cn
- *
+ *  
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- *
+ *  
  *  http://www.apache.org/licenses/LICENSE-2.0
- *
+ *  
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
+ *  
  * @author: zhangzhiliang@caict.ac.cn
- * @date: 2023-03-01 16:17:18
+ * @date: 2023-05-09 09:57:00
  * @file: contract_invoke_example.c
  */
+
 #include "contract_service.h"
 #include <stdio.h>
 #include <string.h>
 
 int main(int argc, char **argv) {
-  char bif_url[64] = "http://172.17.6.84:30010";
+  char bif_url[64] = "http://test.bifcore.bitfactory.cn";
 
   // 创建合约example
   BifContractGetInfoResponse *res_contract_invoke;
@@ -44,9 +44,6 @@ int main(int argc, char **argv) {
   strcpy(req_contract_invoke.private_key,
          "priSPKir4tnCmj6wmBxyaL2ZuAF5TKpf81mYRv4LbeGTGWRjrr");
   strcpy(req_contract_invoke.remarks, "test1234");
-  // req_contract_invoke.domainid = 0;
-  // req_contract_invoke.gas_price = 100;
-  // req_contract_invoke.fee_limit = 2000000;
   req_contract_invoke.amount = 0;
 
   res_contract_invoke = contract_invoke(req_contract_invoke, bif_url);

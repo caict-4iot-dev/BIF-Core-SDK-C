@@ -25,7 +25,7 @@
 #include <string.h>
 
 int main(int argc, char **argv) {
-  char bif_url[64] = "http://172.17.6.84:30010";
+  char bif_url[64] = "http://test.bifcore.bitfactory.cn";
 
   // 账户服务模块-get查询指定账户基础信息接口
   BifAccountGetInfoRequest req_account_base;

@@ -2,21 +2,21 @@
  * © COPYRIGHT 2022 Corporation CAICT All rights reserved.
  *  http://www.caict.ac.cn
  *  https://bitfactory.cn
- *
+ *  
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- *
+ *  
  *  http://www.apache.org/licenses/LICENSE-2.0
- *
+ *  
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
+ *  
  * @author: zhangzhiliang@caict.ac.cn
- * @date: 2023-03-01 16:17:18
+ * @date: 2023-05-09 09:57:00
  * @file: account_set_privilege_example.c
  */
 
@@ -25,7 +25,7 @@
 #include <string.h>
 
 int main(int argc, char **argv) {
-  char bif_url[64] = "http://172.17.6.84:30010";
+  char bif_url[64] = "http://test.bifcore.bitfactory.cn";
 
   // 设置账户metadatas
   BifAccountResponse *res_set_privilege;
@@ -36,7 +36,6 @@ int main(int argc, char **argv) {
   req_set_privilege.signers_num = 1;
   strcpy(req_set_privilege.signers[0].address, address);
   
-  // req_set_privilege.domainid = 0;
   strcpy(req_set_privilege.private_key,
          "priSPKs6YyWpMo5VDxTKLFbLYczZP1i3cffrR9c4UbsyXhFcRz");
   strcpy(req_set_privilege.sender_address,

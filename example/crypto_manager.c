@@ -28,7 +28,6 @@
 #include <string.h>
 
 int main(int argc, char **argv) {
-  char bif_url[64] = "http://172.17.6.84:30010";
 
   // 生成公私钥对
   PrivateKeyManager *private_key_manager1 =
@@ -37,8 +36,7 @@ int main(int argc, char **argv) {
   memset(private_key_manager1, 0, sizeof(PrivateKeyManager));
   memset(&key_pair_entity, 0, sizeof(KeyPairEntity));
 
-  // 创建sm2类型的
-  // int ret = get_bid_and_key_pair_by_sm2(&key_pair_entity);
+  // 创建sm2类型的公司钥对 int ret = get_bid_and_key_pair_by_sm2(&key_pair_entity);
   // 创建默认的ED25519类型公私钥对
   int ret = get_bid_and_key_pair(&key_pair_entity);
   char raw_private_hex[256] = {0};

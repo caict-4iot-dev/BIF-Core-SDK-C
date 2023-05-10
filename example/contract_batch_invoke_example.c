@@ -25,7 +25,7 @@
 #include <string.h>
 
 int main(int argc, char **argv) {
-  char bif_url[64] = "http://172.17.6.84:30010";
+  char bif_url[64] = "http://test.bifcore.bitfactory.cn";
 
   // 创建合约example
   BifContractGetInfoResponse *res_batch_invoke;
@@ -56,10 +56,6 @@ int main(int argc, char **argv) {
   strcpy(req_batch_invoke.private_key,
          "priSPKir4tnCmj6wmBxyaL2ZuAF5TKpf81mYRv4LbeGTGWRjrr");
   strcpy(req_batch_invoke.remarks, "0123456789abcdef");
-  // req_batch_invoke.domainid = 0;
-  // req_batch_invoke.gas_price = 200;
-  // req_batch_invoke.fee_limit = 2000000;
-  // req_batch_invoke.ceil_ledger_seq = 0;
 
   res_batch_invoke = contract_batch_invoke(req_batch_invoke, bif_url);
   if (res_batch_invoke->baseResponse.code != 0)

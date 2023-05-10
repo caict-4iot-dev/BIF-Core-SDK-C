@@ -20,26 +20,17 @@
  * @file: transaction_get_example.c
  */
 
-// #include "account_service.h"
-// #include "block_service.h"
-// #include "contract_service.h"
-// #include "general.h"
-// #include "http.h"
-// #include "key_pair_entity.h"
-// #include "private_key_manager.h"
-// #include "public_key_manager.h"
-// #include "sdk_error.h"
 #include "transaction_service.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 int main(int argc, char **argv) {
-  char bif_url[64] = "http://172.17.6.84:30010";
+  char bif_url[64] = "http://test.bifcore.bitfactory.cn";
 
   // 交易服务模块-获取交易池交易条数接口
   BifTransactionGetTxCacheSizeResponse *res_get_tx_cache_size;
-  int domainid = 1;
+  int domainid = 0;
   res_get_tx_cache_size = get_tx_cache_size(domainid, bif_url);
   if (res_get_tx_cache_size->baseResponse.code != 0)
     printf("code:%d,msg:%s\n", res_get_tx_cache_size->baseResponse.code,
@@ -52,7 +43,6 @@ int main(int argc, char **argv) {
   BifTransactionGetInfoRequest req_transaction_get_info;
   BifTransactionGetInfoResponse *res_transaction_get_info;
   memset(&req_transaction_get_info, 0, sizeof(BifTransactionGetInfoRequest));
-  req_transaction_get_info.domainid = 0;
   char hash_data[] =
       "2f25e770b7ede0966a920cc91503d5354be0b87e2cb3d237869449cd4290101f";
   strcpy(req_transaction_get_info.hash, hash_data);
@@ -73,7 +63,6 @@ int main(int argc, char **argv) {
   req_get_cache_data.domainid = 0;
   char hash_temp[] =
       "2f25e770b7ede0966a920cc91503d5354be0b87e2cb3d237869449cd4290101f";
-  // strcpy(req_get_cache_data.hash, hash_temp);
   res_get_cache_data = get_tx_cache_data(req_get_cache_data, bif_url);
   if (res_get_cache_data->baseResponse.code != 0)
     printf("code:%d,msg:%s\n", res_get_cache_data->baseResponse.code,

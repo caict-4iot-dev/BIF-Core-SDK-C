@@ -25,7 +25,7 @@
 #include <string.h>
 
 int main(int argc, char **argv) {
-  char bif_url[64] = "http://172.17.6.84:30010";
+  char bif_url[64] = "http://test.bifcore.bitfactory.cn";
 
   BifBlockGetTransactionsRequest req;
   BifBlockGetNumberResponse *res;
@@ -59,7 +59,6 @@ int main(int argc, char **argv) {
   req_block_get_info.block_number = 11500;
   req_block_get_info.domainid = 0;
   res_block_get_info = get_block_info(req_block_get_info, bif_url);
-  // printf("resBlockGetInfo all:%s\n", resBlockGetInfo->value);
   if (res_block_get_info->baseResponse.code != 0)
     printf("code:%d,msg:%s\n", res_block_get_info->baseResponse.code,
            res_block_get_info->baseResponse.msg);

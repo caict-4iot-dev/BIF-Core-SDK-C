@@ -2,21 +2,21 @@
  * © COPYRIGHT 2022 Corporation CAICT All rights reserved.
  *  http://www.caict.ac.cn
  *  https://bitfactory.cn
- *
+ *  
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- *
+ *  
  *  http://www.apache.org/licenses/LICENSE-2.0
- *
+ *  
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
+ *  
  * @author: zhangzhiliang@caict.ac.cn
- * @date: 2023-03-01 16:17:18
+ * @date: 2023-05-09 09:57:00
  * @file: contract_create_example.c
  */
 
@@ -25,7 +25,7 @@
 #include <string.h>
 
 int main(int argc, char **argv) {
-  char bif_url[64] = "http://172.17.6.84:30010";
+  char bif_url[64] = "http://test.bifcore.bitfactory.cn";
 
   // 创建合约example
   BifContractGetInfoResponse *res_create_contract;
@@ -41,9 +41,6 @@ int main(int argc, char **argv) {
       "\"private_tx_\"+input.id;let data = Chain.load(key);return data;}";
   input_sds_initialize(&req_create_contract.payload,
                        payload); // 初始化赋值请求中sds类型变量接口
-  // req_create_contract.payload = sdscpy(req_create_contract.payload, payload);
-  // // 类似库函数memcpy的封装
-  //  req_create_contract.domainid = 0;
   req_create_contract.gas_price = 10;
   req_create_contract.fee_limit = 100000000;
 
@@ -51,7 +48,7 @@ int main(int argc, char **argv) {
          "priSPKir4tnCmj6wmBxyaL2ZuAF5TKpf81mYRv4LbeGTGWRjrr");
   strcpy(req_create_contract.sender_address,
          "did:bid:ef2AuAJid1dB22rk3M6vB6cUc1ENnpfEe");
-  req_create_contract.contract_type = TYPE_V8;
+  req_create_contract.contract_type = 0;
   req_create_contract.init_balance = 100000000;
 
   res_create_contract = contract_create(req_create_contract, bif_url);

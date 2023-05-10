@@ -2,34 +2,30 @@
  * © COPYRIGHT 2022 Corporation CAICT All rights reserved.
  *  http://www.caict.ac.cn
  *  https://bitfactory.cn
- *
+ *  
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- *
+ *  
  *  http://www.apache.org/licenses/LICENSE-2.0
- *
+ *  
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
+ *  
  * @author: zhangzhiliang@caict.ac.cn
- * @date: 2023-03-01 16:17:18
+ * @date: 2023-05-09 09:57:00
  * @file: transaction_batch_gas_send_example.c
  */
 
-// #include "block_service.h"
-// #include "key_pair_entity.h"
-// #include "private_key_manager.h"
-// #include "public_key_manager.h"
 #include "transaction_service.h"
 #include <stdio.h>
 #include <string.h>
 
 int main(int argc, char **argv) {
-  char bif_url[64] = "http://172.17.6.84:30010";
+  char bif_url[64] = "http://test.bifcore.bitfactory.cn";
 
   // 序列化交易gasSend发交易接口
   BifBatchGasSendRequest req_batch_gas_send;

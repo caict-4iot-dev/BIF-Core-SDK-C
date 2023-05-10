@@ -40,15 +40,10 @@ int main(int argc, char **argv) {
   const char hd_path[32] = "m/44'/0/0'/0/0";
   const char mnemonic[512] = "swift old dial that wave naive seminar lecture "
                              "increase coyote scheme end";
-  // mnemonic ED25519 of
-  // enc_pri:priSPKepT8DV8wTAYiAU6LjUPQFqdzN9ndcVPMv9cgNeTBYQ6V mnemonic SM2 of
-  // enc_pri: priSrrf9DceCPyYtjvaEqwyFm4JThqo7G6ZJUdwwgsYn9oq9KX
-  // generate_private_keys_by_crypto(mnemonic, hd_path);
-  // //无type参数时默认生成ED25519的私钥
+                             
+  // 无type参数时默认生成ED25519的私钥
   strcpy(enc_private_key,
          generate_private_keys_by_crypto_type(mnemonic, hd_path, SM2));
-  // strcpy(enc_private_key, generate_private_keys_by_crypto(mnemonic, hd_path,
-  // SM2));
 
   printf("enc_private_key:%s\n", enc_private_key);
 

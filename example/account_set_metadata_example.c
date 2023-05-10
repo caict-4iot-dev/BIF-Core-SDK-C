@@ -2,21 +2,21 @@
  * © COPYRIGHT 2022 Corporation CAICT All rights reserved.
  *  http://www.caict.ac.cn
  *  https://bitfactory.cn
- *
+ *  
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- *
+ *  
  *  http://www.apache.org/licenses/LICENSE-2.0
- *
+ *  
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *
+ *  
  * @author: zhangzhiliang@caict.ac.cn
- * @date: 2023-03-01 16:17:18
+ * @date: 2023-05-09 09:57:00
  * @file: account_set_metadata_example.c
  */
 
@@ -26,7 +26,7 @@
 #include <string.h>
 
 int main(int argc, char **argv) {
-  char bif_url[64] = "http://172.17.6.84:30010";
+  char bif_url[64] = "http://test.bifcore.bitfactory.cn";
 
   // 设置账户metadatas
   BifAccountResponse *res_set_account_metasatas;
@@ -38,8 +38,7 @@ int main(int argc, char **argv) {
       (char *)sdk_malloc(strlen(value) + 1);
 
   req_set_account_metasatas.operations_num = 1; // operations_array个数
-  // memset(&req_set_account_metasatas,0,
-  // sizeof(BifAccountSetMetadatasRequest));
+
   memset(&req_set_account_metasatas.private_key, 0,
          sizeof(req_set_account_metasatas.private_key));
   memset(&req_set_account_metasatas.sender_address, 0,
@@ -47,7 +46,6 @@ int main(int argc, char **argv) {
   memset(&req_set_account_metasatas.remarks, 0,
          sizeof(req_set_account_metasatas.remarks));
 
-  // req_set_account_metasatas.ceil_ledger_seq = 0;
   req_set_account_metasatas.domainid = 0;
   req_set_account_metasatas.fee_limit = 0;
   req_set_account_metasatas.gas_price = 0;

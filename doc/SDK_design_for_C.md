@@ -65,7 +65,7 @@ struct BifAccountResponses {
     KeyPairEntity key_pair_entity;
     memset(&key_pair_entity, 0,sizeof(KeyPairEntity));
 
-	int ret = get_bid_and_key_pair(&key_pair_entity);;
+	int ret = get_bid_and_key_pair(&key_pair_entity);
 	key_pair_entity.enc_address;
 	key_pair_entity.enc_public_key;
 	key_pair_entity.enc_private_key;
@@ -425,11 +425,11 @@ BifAccountResponse* create_account(BifCreateAccountRequest req, const char* url)
 | sender_address  | char*   | 必填，交易源账号，即交易的发起方                             |
 | private_key     | char*   | 必填，交易源账户私钥                                         |
 | ceil_ledger_seq | int64_t | 选填，区块高度限制, 默认设置0，如果大于0，则交易只有在该区块高度之前（包括该高度）才有效 |
-| gas_price       | int64_t | 选填，打包费用 (单位是PT)，默认设置100                       |
-| fee_limit       | long    | 选填，交易花费的手续费(单位是PT)，默认1000000L               |
-| domainId        | int     | 选填，指定域ID，默认主共识域id(0)                            |
+| gas_price       | int64_t | 选填，打包费用 ，单位是星火萤（glowstone)，默认设置100       |
+| fee_limit       | long    | 选填，交易花费的手续费，单位是星火萤(glowstone)，默认1000000L |
+| domainId        | int     | 选填，指定域ID，默认主共识域id(0)，如果没有业务域的话必须设置默认的主共识域0，后面关于此domainid字段都是一样的规则 |
 | dest_address    | char*   | 必填，目标账户地址                                           |
-| init_balance    | int64_t | 必填，初始化星火令，单位PT，1 星火令 = 10^8 PT               |
+| init_balance    | int64_t | 必填，初始化星火令，单位星火萤，1 星火令 = 10^8 glowstone    |
 | remarks         | char*   | 选填，用户自定义给交易的备注                                 |
 
 > 响应字段数据
@@ -459,18 +459,14 @@ BifAccountResponse* create_account(BifCreateAccountRequest req, const char* url)
 > 示例
 
 ```c
-    char bif_url[64] = "http://172.17.6.84:30010";
+    char bif_url[64] = "http://test.bifcore.bitfactory.cn";
     //创建账户
     BifAccountResponse *res_create_account;
     BifCreateAccountRequest req_create_account;
     memset(&req_create_account,0,sizeof(BifCreateAccountRequest));
 
-    req_create_account.domainid = 0;
-    //strcpy(req_create_account.private_key,"");
-  strcpy(req_create_account.private_key,"priSPKir4tnCmj6wmBxyaL2ZuAF5TKpf81mYRv4LbeGTGWRjrr");
+    req_create_account.domainid = 0;  strcpy(req_create_account.private_key,"priSPKir4tnCmj6wmBxyaL2ZuAF5TKpf81mYRv4LbeGTGWRjrr");
     strcpy(req_create_account.sender_address, "did:bid:ef2AuAJid1dB22rk3M6vB6cUc1ENnpfEe");
-    //strcpy(req_create_account.sender_address, ""); //空
-
     strcpy(req_create_account.dest_address,"did:bid:ef2AuAJid1dB22rk3M6vB6cUc1ENnpfT0");
     req_create_account.init_balance = 1000000;
     strcpy(req_create_account.remarks,"testremarks");
@@ -543,13 +539,12 @@ BIFAccountGetInfoResponse get_account(BifAccountGetInfoRequest req, const char* 
 
 ```c
 	// 初始化请求参数
-    char bif_url[64] = "http://172.17.6.84:30010";
+    char bif_url[64] = "http://test.bifcore.bitfactory.cn";
 
     BifAccountGetInfoRequest req_account_base;
     BifAccountResponse *res_account_base;
     memset(&req_account_base, 0, sizeof(BifAccountGetInfoRequest));
     strcpy(req_account_base.address, "did:bid:ef2AuAJid1dB22rk3M6vB6cUc1ENnpfEe");
-    //req_account_base.domainid = 0;
     //获取账户信息接口的函数
     res_account_base = get_account(req_account_base, bif_url);
 	if(res_account_base->baseResponse.code != 0)
@@ -640,7 +635,7 @@ int get_nonce(BifAccountGetInfoRequest req, const char* url);
 
 ```c
 	// 初始化请求参数     
-	char bif_url[64] = "http://172.17.6.84:30010";
+	char bif_url[64] = "http://test.bifcore.bitfactory.cn";
     BifAccountGetInfoRequest req_nonce;
 	BifAccountResponse *res_account_base;
     memset(&req_nonce, 0, sizeof(req_nonce));
@@ -709,7 +704,7 @@ BIFAccountGetBalanceResponse get_account_balance(BifAccountGetInfoRequest req, c
 
 ```c
 	// 初始化请求参数
-	char bif_url[64] = "http://172.17.6.84:30010";
+	char bif_url[64] = "http://test.bifcore.bitfactory.cn";
  	//获取账户balance
 	BifAccountGetInfoRequest req_account_base;
     BifAccountResponse *res_account_base;
@@ -756,8 +751,8 @@ BIFAccountSetMetadatasResponse set_metadatas(BifAccountSetMetadatasRequest req, 
 | value           | char*   | 必填，OperationsData结构体中变量，metadatas的内容，长度限制[0, 256000] |
 | version         | int64_t | 选填，OperationsData结构体中变量，metadatas的版本            |
 | delete_flag     | bool    | 选填，OperationsData结构体中变量，是否删除remarks            |
-| gas_price       | int64_t | 选填，打包费用 (单位是PT)，默认100                           |
-| fee_limit       | int64_t | 选填，交易花费的手续费(单位是PT)，默认1000000                |
+| gas_price       | int64_t | 选填，打包费用 ，单位是星火萤(glowstone)，默认100            |
+| fee_limit       | int64_t | 选填，交易花费的手续费，单位是星火萤(glowstone)，默认1000000 |
 | domainId        | int     | 选填，指定域ID，默认主共识域id(0)                            |
 
 > 响应数据
@@ -785,7 +780,7 @@ BIFAccountSetMetadatasResponse set_metadatas(BifAccountSetMetadatasRequest req, 
 
 ```c
 	// 初始化请求参数
-    char bif_url[64] = "http://172.17.6.84:30010";
+    char bif_url[64] = "http://test.bifcore.bitfactory.cn";
 
     //设置账户metadatas
   	BifAccountResponse *res_set_account_metasatas;
@@ -797,8 +792,6 @@ BIFAccountSetMetadatasResponse set_metadatas(BifAccountSetMetadatasRequest req, 
       	(char *)sdk_malloc(strlen(value) + 1);
 
   	req_set_account_metasatas.operations_num = 1; // operations_array个数
-  	// memset(&req_set_account_metasatas,0,
-  	// sizeof(BifAccountSetMetadatasRequest));
   	memset(&req_set_account_metasatas.private_key, 0,
          sizeof(req_set_account_metasatas.private_key));
   	memset(&req_set_account_metasatas.sender_address, 0,
@@ -806,7 +799,6 @@ BIFAccountSetMetadatasResponse set_metadatas(BifAccountSetMetadatasRequest req, 
   	memset(&req_set_account_metasatas.remarks, 0,
          sizeof(req_set_account_metasatas.remarks));
 
-  	// req_set_account_metasatas.ceil_ledger_seq = 0;
   	req_set_account_metasatas.domainid = 0;
   	req_set_account_metasatas.fee_limit = 0;
   	req_set_account_metasatas.gas_price = 0;
@@ -890,7 +882,7 @@ BIFAccountGetMetadatasResponse get_account_metadatas(BifAccountGetMetadatasReque
 
 ```java
 	// 初始化请求参数
-	char bif_url[64] = "http://172.17.6.84:30010";
+	char bif_url[64] = "http://test.bifcore.bitfactory.cn";
    //查询指定地址的metadatas接口
     BifAccountGetMetadatasRequest req_metadata;
     BifAccountResponse *res_metadata;
@@ -941,8 +933,8 @@ BIFAccountSetPrivilegeResponse set_privilege(BifAccountSetPrivilegeRequest req, 
 | typeThresholds.type      | int                | 操作类型，必须大于0                                          |
 | typeThresholds.threshold | int64_t            | 门限值，大小限制[0, Long.MAX_VALUE]                          |
 | master_weight            | char*              | 选填，权重                                                   |
-| gas_price                | int64_t            | 选填，打包费用 (单位是PT)，默认100                           |
-| fee_limit                | int64_t            | 选填，交易花费的手续费(单位是PT)，默认1000000                |
+| gas_price                | int64_t            | 选填，打包费用 单位是星火萤(glowstone)，默认100              |
+| fee_limit                | int64_t            | 选填，交易花费的手续费，单位是星火萤(glowstone)，默认1000000 |
 | domainId                 | int                | 选填，指定域ID，默认主共识域id(0)                            |
 
 > 响应数据
@@ -969,7 +961,7 @@ BIFAccountSetPrivilegeResponse set_privilege(BifAccountSetPrivilegeRequest req, 
 
 ```c
      //初始化参数
-	char bif_url[64] = "http://172.17.6.84:30010";
+	char bif_url[64] = "http://test.bifcore.bitfactory.cn";
      //设置账户metadatas
     BifAccountResponse *res_set_privilege;
     BifAccountSetPrivilegeRequest req_set_privilege;
@@ -978,19 +970,13 @@ BIFAccountSetPrivilegeResponse set_privilege(BifAccountSetPrivilegeRequest req, 
 
     req_set_privilege.signers_num = 1;
     strcpy(req_set_privilege.signers[0].address, address);
-    //req_set_privilege.signers[0].weight = 2;
 
     strcpy(req_set_privilege.master_weight, "2");
-    //req_set_privilege.ceil_ledger_seq = 0;
-    //req_set_privilege.domainid = 0;
-    //req_set_privilege.gas_price = 100;
-    //req_set_privilege.fee_limit = 1000000;
     strcpy(req_set_privilege.private_key, "priSPKdgaD3SnJ94nJNijiHsmrsWn8yXXeroCwDJp3q5WU4hxY");
     strcpy(req_set_privilege.sender_address, "did:bid:efjijAvhn6hVCnEueAm52rp9N6hwS2bf");
     req_set_privilege.type_threshold_num = 2;
     req_set_privilege.typeThresholds[0].type = 1;
     req_set_privilege.typeThresholds[0].threshold = 1;
-
     req_set_privilege.typeThresholds[1].type = 7;
     req_set_privilege.typeThresholds[1].threshold = 2;
     strcpy(req_set_privilege.tx_threshold, "2");
@@ -1062,7 +1048,7 @@ BifAccountResponse get_account_priv(BifAccountGetInfoRequest req, const char* ur
 
 ```c
      //初始化参数
-	char bif_url[64] = "http://172.17.6.84:30010";
+	char bif_url[64] = "http://test.bifcore.bitfactory.cn";
      //获取指定账户权限接口
     BifAccountResponse *res_account_base;
     BifAccountGetInfoRequest req_account_base;
@@ -1136,12 +1122,11 @@ BifContractCheckValidResponse *check_contract_address(BifContractCheckValidReque
 
 ```c
    // 初始化请求参数
-   char bif_url[64] = "http://172.17.6.84:30010";
+   char bif_url[64] = "http://test.bifcore.bitfactory.cn";
    //合约模块-根据address domainid获取合约地址是否可用接口
    BifContractCheckValidRequest req_check_contract_addr;
    BifContractCheckValidResponse *res_contract_check_addr;
    	memset(&req_check_contract_addr,0,sizeof(BifContractCheckValidRequest));
-   //req_check_contract_addr.domainid = 21;
    strcpy(req_check_contract_addr.contract_address, "did:bid:efoyBUQzHSCeCj3VQk4uSxiZW9GRYcJv");
    res_contract_check_addr = check_contract_address(req_check_contract_addr, bif_url);
 
@@ -1178,15 +1163,15 @@ BifContractGetInfoResponse *contract_create(BifContractCreateRequest req, const 
 | 参数          | 类型    | 描述                                                         |
 | ------------- | ------- | ------------------------------------------------------------ |
 | sender_address | char* | 必填，交易源账号，即交易的发起方                             |
-| gas_price | int64_t | 选填，打包费用 (单位是PT)默认100        |
-| fee_limit | int64_t | 选填，交易花费的手续费(单位是PT)，默认1000000         |
+| gas_price | int64_t | 选填，打包费用 ，单位是星火萤(glowstone)，默认100 |
+| fee_limit | int64_t | 选填，交易花费的手续费，单位是星火萤(glowstone)，默认1000000 |
 | private_key | char* | 必填，交易源账户私钥                                         |
 | ceil_ledger_seq | long   | 选填，区块高度限制, 如果大于0，则交易只有在该区块高度之前（包括该高度）才有效 |
 | remarks       | char* | 选填，用户自定义给交易的备注                                 |
-| init_balance | long | 必填，给合约账户的初始化星火令，单位PT，1 星火令 = 10^8 PT, 大小限制[1, Long.MAX_VALUE] |
+| init_balance | long | 必填，给合约账户的初始化星火令，单位是星火萤(glowstone)，1 星火令 = 10^8 glowstone, 大小限制[1, Long.MAX_VALUE] |
 | payload       | sds | 必填，对应语种的合约代码                                     |
 | init_input | sds | 选填，合约代码中init方法的入参 |
-| type | int | 选填，合约的类型，默认是0 , 0: javascript，1 :evm 3:wasm 4:jvm。 |
+| type | int | 选填，合约的类型，默认是0 , 0: javascript，1 :evm |
 | domainId      | int | 选填，指定域ID，默认主共识域id(0)       |
 
 > 响应数据
@@ -1216,7 +1201,7 @@ BifContractGetInfoResponse *contract_create(BifContractCreateRequest req, const 
 
 ```c
 	// 初始化请求参数
-    char bif_url[64] = "http://172.17.6.84:30010";
+    char bif_url[64] = "http://test.bifcore.bitfactory.cn";
     //创建合约example
      BifContractGetInfoResponse *res_create_contract;
   	BifContractCreateRequest req_create_contract;
@@ -1231,7 +1216,6 @@ BifContractGetInfoResponse *contract_create(BifContractCreateRequest req, const 
       "\"private_tx_\"+input.id;let data = Chain.load(key);return data;}";
   	input_sds_initialize(&req_create_contract.payload,
                        payload); // 初始化赋值请求中sds类型变量接口
-  	//  req_create_contract.domainid = 0;
   	req_create_contract.gas_price = 10;
   	req_create_contract.fee_limit = 100000000;
 
@@ -1239,7 +1223,7 @@ BifContractGetInfoResponse *contract_create(BifContractCreateRequest req, const 
          "priSPKir4tnCmj6wmBxyaL2ZuAF5TKpf81mYRv4LbeGTGWRjrr");
   	strcpy(req_create_contract.sender_address,
          "did:bid:ef2AuAJid1dB22rk3M6vB6cUc1ENnpfEe");
-  	req_create_contract.contract_type = TYPE_V8;
+  	req_create_contract.contract_type = 0;
   	req_create_contract.init_balance = 100000000;
 
   	res_create_contract = contract_create(req_create_contract, bif_url);
@@ -1307,7 +1291,7 @@ BifContractCheckValidResponse *get_contract_info(BifContractCheckValidRequest re
 
 ```c
 	// 初始化请求参数
-    char bif_url[64] = "http://172.17.6.84:30010";
+    char bif_url[64] = "http://test.bifcore.bitfactory.cn";
 	BifContractCheckValidRequest req_contract_info;
     BifContractCheckValidResponse *res_contract_info;
     memset(&req_contract_info,0,sizeof(BifContractCheckValidRequest));
@@ -1387,11 +1371,10 @@ BIFContractGetAddressResponse get_contract_address(BIFContractGetAddressRequest)
 
 ```c
 	// 初始化请求参数
- 	char bif_url[64] = "http://172.17.6.84:30010";
+ 	char bif_url[64] = "http://test.bifcore.bitfactory.cn";
 	BifContractGetAddressRequest req_contract_addr;
     BifContractGetInfoResponse *res_contract_addr;
     memset(&req_contract_addr, 0 ,sizeof(BifContractGetAddressRequest));
-    //req_contract_addr.domainid = 21;
     //hash根据实际节点交易生成的值即可
     char hash_test[] = "2f25e770b7ede0966a920cc91503d5354be0b87e2cb3d237869449cd4290101f";
     strcpy(req_contract_addr.hash, hash_test);
@@ -1424,14 +1407,14 @@ BifContractGetInfoResponse *contract_query(BifContractCallRequest req, const cha
 
 > 请求参数
 
-| 参数             | 类型    | 描述                                           |
-| ---------------- | ------- | ---------------------------------------------- |
-| source_address   | char*   | 选填，合约触发账户地址                         |
-| contract_address | char*   | 必填，合约账户地址                             |
-| input            | char*   | 选填，合约入参                                 |
-| gas_price        | int64_t | 选填，打包费用 (单位是PT)默认，默认100L        |
-| fee_limit        | int64_t | 选填，交易花费的手续费(单位是PT)，默认1000000L |
-| domainId         | int     | 选填，指定域ID，默认主共识域id(0)              |
+| 参数             | 类型    | 描述                                                         |
+| ---------------- | ------- | ------------------------------------------------------------ |
+| source_address   | char*   | 选填，合约触发账户地址                                       |
+| contract_address | char*   | 必填，合约账户地址                                           |
+| input            | char*   | 选填，合约入参                                               |
+| gas_price        | int64_t | 选填，打包费用 ，单位是星火萤(glowstone)，默认100L           |
+| fee_limit        | int64_t | 选填，交易花费的手续费，单位是星火萤(glowstone)，默认1000000L |
+| domainId         | int     | 选填，指定域ID，默认主共识域id(0)                            |
 
 
 > 响应数据
@@ -1457,7 +1440,7 @@ BifContractGetInfoResponse *contract_query(BifContractCallRequest req, const cha
 
 ```c
 	// 初始化请求参数
-	char bif_url[64] = "http://172.17.6.84:30010";
+	char bif_url[64] = "http://test.bifcore.bitfactory.cn";
     BifContractGetInfoResponse *res_contract_query;
   	BifContractCallRequest req_contract_query;
   	memset(&req_contract_query, 0, sizeof(BifContractCallRequest));
@@ -1467,15 +1450,10 @@ BifContractGetInfoResponse *contract_query(BifContractCallRequest req, const cha
 
   	input_sds_initialize(&req_contract_query.input,
                        init_input); // 初始化赋值给sds类型的变量接口
-  	// strcpy(req_contract_query.contract_address,
-  	// "efjijAvhn6hVCnEueAm52rp9N6hwS2bf");
   	strcpy(req_contract_query.contract_address,
          "did:bid:efoyBUQzHSCeCj3VQk4uSxiZW9GRYcJv");
   	strcpy(req_contract_query.source_address,
          "did:bid:ef2AuAJid1dB22rk3M6vB6cUc1ENnpfEe");
-  	// req_contract_query.domainid = 0;
-  	// req_contract_query.gas_price = 100;
-  	// req_contract_query.fee_limit = 1000000000;
 
   	res_contract_query = contract_query(req_contract_query, bif_url);
   	if (res_contract_query->baseResponse.code != 0)
@@ -1534,8 +1512,8 @@ BifContractGetInfoResponse *contract_invoke(BifContractInvokeRequest req, const 
 | 参数             | 类型    | 描述                                                         |
 | ---------------- | ------- | ------------------------------------------------------------ |
 | sender_address   | char*   | 必填，交易源账号，即交易的发起方                             |
-| gas_price        | int64_t | 选填，打包费用 (单位是PT)默认，默认100                       |
-| fee_limit        | int64_t | 选填，交易花费的手续费(单位是PT)，默认1000000                |
+| gas_price        | int64_t | 选填，打包费用，单位是星火萤(glowstone)，默认100             |
+| fee_limit        | int64_t | 选填，交易花费的手续费，单位是星火萤(glowstone)，默认1000000 |
 | private_key      | char*   | 必填，交易源账户私钥                                         |
 | ceil_ledger_seq  | int64_t | 选填，区块高度限制, 如果大于0，则交易只有在该区块高度之前（包括该高度）才有效 |
 | remarks          | char*   | 选填，用户自定义给交易的备注                                 |
@@ -1572,7 +1550,7 @@ BifContractGetInfoResponse *contract_invoke(BifContractInvokeRequest req, const 
 
 ```c
 	// 初始化请求参数
-    char bif_url[64] = "http://172.17.6.84:30010";
+    char bif_url[64] = "http://test.bifcore.bitfactory.cn";
     BifContractGetInfoResponse *res_contract_invoke;
   	BifContractInvokeRequest req_contract_invoke;
   	memset(&req_contract_invoke, 0, sizeof(BifContractInvokeRequest));
@@ -1589,9 +1567,6 @@ BifContractGetInfoResponse *contract_invoke(BifContractInvokeRequest req, const 
   	strcpy(req_contract_invoke.private_key,
          "priSPKir4tnCmj6wmBxyaL2ZuAF5TKpf81mYRv4LbeGTGWRjrr");
   	strcpy(req_contract_invoke.remarks, "test1234");
-  	// req_contract_invoke.domainid = 0;
-  	// req_contract_invoke.gas_price = 100;
-  	// req_contract_invoke.fee_limit = 2000000;
   	req_contract_invoke.amount = 0;
 
   	res_contract_invoke = contract_invoke(req_contract_invoke, bif_url);
@@ -1637,8 +1612,8 @@ BifContractGetInfoResponse *contract_batch_invoke(BifBatchContractInvokeRequest 
 | 参数                                  | 类型             | 描述                                                         |
 | ------------------------------------- | ---------------- | ------------------------------------------------------------ |
 | sender_address                        | char*            | 必填，交易源账号，即交易的发起方                             |
-| gas_price                             | int64_t          | 选填，打包费用 (单位是PT)默认，默认100                       |
-| fee_limit                             | int64_t          | 选填，交易花费的手续费(单位是PT)，默认1000000                |
+| gas_price                             | int64_t          | 选填，打包费用， 单位是星火萤(glowstone)，默认100            |
+| fee_limit                             | int64_t          | 选填，交易花费的手续费，单位是星火萤(glowstone)，默认1000000 |
 | private_key                           | char*            | 必填，交易源账户私钥                                         |
 | ceil_ledger_seq                       | int64_t          | 选填，区块高度限制, 如果大于0，则交易只有在该区块高度之前（包括该高度）才有效 |
 | remarks                               | char*            | 选填，用户自定义给交易的备注                                 |
@@ -1677,7 +1652,7 @@ BifContractGetInfoResponse *contract_batch_invoke(BifBatchContractInvokeRequest 
 
 ```c
 	// 初始化参数
-    char bif_url[64] = "http://172.17.6.84:30010";
+    char bif_url[64] = "http://test.bifcore.bitfactory.cn";
       BifContractGetInfoResponse *res_batch_invoke;
   	BifBatchContractInvokeRequest req_batch_invoke;
   	memset(&req_batch_invoke, 0, sizeof(BifBatchContractInvokeRequest));
@@ -1706,10 +1681,6 @@ BifContractGetInfoResponse *contract_batch_invoke(BifBatchContractInvokeRequest 
   	strcpy(req_batch_invoke.private_key,
          "priSPKir4tnCmj6wmBxyaL2ZuAF5TKpf81mYRv4LbeGTGWRjrr");
   	strcpy(req_batch_invoke.remarks, "0123456789abcdef");
-  	// req_batch_invoke.domainid = 0;
-  	// req_batch_invoke.gas_price = 200;
-  	// req_batch_invoke.fee_limit = 2000000;
-  	// req_batch_invoke.ceil_ledger_seq = 0;
 
   	res_batch_invoke = contract_batch_invoke(req_batch_invoke, bif_url);
   	if (res_batch_invoke->baseResponse.code != 0)
@@ -1777,8 +1748,8 @@ BifTransactionSubmitResponse *gas_send(BifTransactionGasSendRequest req, const c
 | remarks         | char*   | 选填，用户自定义给交易的备注                                 |
 | dest_address    | char*   | 必填，目的地址                                               |
 | amount          | int64_t | 必填，转账金额                                               |
-| gas_price       | long    | 选填，打包费用 (单位是PT)，默认100                           |
-| fee_limit       | long    | 选填，交易花费的手续费(单位是PT)，默认1000000                |
+| gas_price       | long    | 选填，打包费用，单位是星火萤(glowstone)，默认100             |
+| fee_limit       | long    | 选填，交易花费的手续费，单位是星火萤(glowstone)，默认1000000 |
 | domainId        | int     | 选填，指定域ID，默认主共识域id(0)                            |
 
 > 响应数据
@@ -1807,13 +1778,12 @@ BifTransactionSubmitResponse *gas_send(BifTransactionGasSendRequest req, const c
 
 ```c
 	// 初始化请求参数
+	char bif_url[64] = "http://test.bifcore.bitfactory.cn";
     BifTransactionGasSendRequest req_gas_send;
     BifTransactionSubmitResponse *res_gas_send;
     memset(&req_gas_send, 0, sizeof(BifTransactionGasSendRequest));
 
     req_gas_send.amount = 10;
-    //req_gas_send.ceil_ledger_seq = 0;
-    //req_gas_send.domainid = 0;
     strcpy(req_gas_send.dest_address, "did:bid:zf32dF6p2NA1Dzw6ySQThL2v9W3Dmbje");
     strcpy(req_gas_send.sender_address, "did:bid:ef2AuAJid1dB22rk3M6vB6cUc1ENnpfEe");
     strcpy(req_gas_send.private_key, "priSPKir4tnCmj6wmBxyaL2ZuAF5TKpf81mYRv4LbeGTGWRjrr");
@@ -1884,7 +1854,7 @@ BifTransactionGetInfoResponse *get_transaction_info(BifTransactionGetInfoRequest
 
 ```c
 	// 初始化请求参数
-	char bif_url[64] = "http://172.17.6.84:30010";
+	char bif_url[64] = "http://test.bifcore.bitfactory.cn";
 	BifTransactionGetInfoRequest req_transaction_get_info;
    BifTransactionGetInfoResponse *res_transaction_get_info;
    memset(&req_transaction_get_info, 0, sizeof(BifTransactionGetInfoRequest));
@@ -1930,8 +1900,8 @@ BifTransactionGetInfoResponse *evaluate_fee(BifEvaluateFeeRequest req, const cha
 | call_operation            | BifCallOperation           | 选填，如果是合约调用时必填                                   |
 | create_contract_operation | BifContractCreateOperation | 选填，合约创建时为必填                                       |
 | pay_coin_operation        | BifPayCoinOperation        | 选填, 转账时为必填                                           |
-| gas_price                 | int64_t                    | 选填，打包费用 (单位是PT) ，默认100                          |
-| fee_limit                 | int64_t                    | 选填，交易花费的手续费(单位是PT)，默认1000000                |
+| gas_price                 | int64_t                    | 选填，打包费用，单位是星火萤(glowstone)，默认100             |
+| fee_limit                 | int64_t                    | 选填，交易花费的手续费，单位是星火萤(glowstone)，默认1000000 |
 | domainId                  | int                        | 选填，指定域ID，默认主共识域id(0)                            |
 
 > 响应数据
@@ -1958,13 +1928,12 @@ BifTransactionGetInfoResponse *evaluate_fee(BifEvaluateFeeRequest req, const cha
 
 ```c
     //初始化参数
-	char bif_url[64] = "http://172.17.6.84:30010";
+	char bif_url[64] = "http://test.bifcore.bitfactory.cn";
 	BifEvaluateFeeRequest req_evaluate;
     BifTransactionGetInfoResponse *res_evaluate;
     memset(&req_evaluate, 0,sizeof(BifEvaluateFeeRequest));
 
     req_evaluate.call_operation.amount = 10;
-    //strcpy(req_evaluate.call_operation.dest_address, "did:bid:zf6LBRqPHfXjg46JqkCTqGb8QM9GTFB7");
     strcpy(req_evaluate.call_operation.dest_address, "did:bid:ef2CENizhXm2VJYmHV1a8HULb2Xg32QcU");
     strcpy(req_evaluate.sender_address, "did:bid:ef2AuAJid1dB22rk3M6vB6cUc1ENnpfEe");
     strcpy(req_evaluate.remarks, "0123456789abcdef");
@@ -2062,7 +2031,7 @@ BifTransactionSubmitResponse *bif_submit(BifTransactionSubmitRequest req, const 
 
 ```c
   	// 初始化参数
-	char bif_url[64] = "http://172.17.6.84:30010";
+	char bif_url[64] = "http://test.bifcore.bitfactory.cn";
     BifTransactionSubmitRequest req_submit;
     BifTransactionSubmitResponse *res_submit;
     memset(&req_submit, 0, sizeof(req_submit));
@@ -2131,7 +2100,7 @@ BifTransactionGetTxCacheSizeResponse *get_tx_cache_size(const char* url);
 > 示例
 
 ```c
-   char bif_url[64] = "http://172.17.6.84:30010";
+   char bif_url[64] = "http://test.bifcore.bitfactory.cn";
    BifTransactionGetTxCacheSizeResponse *res_get_tx_cache_size;
    int domainid = 0;
    res_get_tx_cache_size = get_tx_cache_size(domainid, bif_url);
@@ -2176,8 +2145,8 @@ BifTransactionGetInfoResponse *evaluate_batch_fee(BifEvaluateFeeBatchRequest req
 | operation_datas.call_operation             | BifCallOperation           | 选填，如果是合约调用则必填                                   |
 | operation_datas.BifContractCreateOperation | BifContractCreateOperation | 选填，合约创建时则必填                                       |
 | operation_datas.pay_coin_operation         | BifPayCoinOperation        | 选填，转账时则必填                                           |
-| gas_price                                  | int64_t                    | 必填，打包费用 (单位是PT) ，默认100                          |
-| fee_limit                                  | int64_t                    | 选填，交易花费的手续费(单位是PT)，默认1000000                |
+| gas_price                                  | int64_t                    | 必填，打包费用 ，单位是星火萤(glowstone)，默认100            |
+| fee_limit                                  | int64_t                    | 选填，交易花费的手续费，单位是星火萤(glowstone)，默认1000000 |
 | domainId                                   | int                        | 选填，指定域ID，默认主共识域id(0)                            |
 
 
@@ -2205,7 +2174,7 @@ BifTransactionGetInfoResponse *evaluate_batch_fee(BifEvaluateFeeBatchRequest req
 
 ```c
     // 初始化参数
-    char bif_url[64] = "http://172.17.6.84:30010";
+    char bif_url[64] = "http://test.bifcore.bitfactory.cn";
     BifEvaluateFeeBatchRequest req_evaluate;
     BifTransactionGetInfoResponse *res_evaluate;
     memset(&req_evaluate, 0,sizeof(BifEvaluateFeeBatchRequest));
@@ -2322,7 +2291,7 @@ BifTransactionGetInfoResponse *get_tx_cache_data(BifTransactionGetInfoRequest re
 
 ```c
 	// 初始化参数
-	char bif_url[64] = "http://172.17.6.84:30010";
+	char bif_url[64] = "http://test.bifcore.bitfactory.cn";
 	BifTransactionGetInfoRequest req_get_cache_data;
     BifTransactionGetInfoResponse *res_get_cache_data;
     memset(&req_get_cache_data, 0, sizeof(BifTransactionGetInfoRequest));
@@ -2457,8 +2426,8 @@ BifTransactionGetInfoResponse *get_tx_cache_data(BifTransactionGetInfoRequest re
 | batch_gas_send_operation.dest_address | char*                 | 必填，目的地址                                               |
 | batch_gas_send_operation.amount       | int64_t               | 必填，转账金额                                               |
 | batch_gas_send_num                    | int                   | 必填，批量转移结构体batch_gas_send_operation的实际数量（1,100],超过100会返回错误信息 |
-| gas_price                             | long                  | 选填，打包费用 (单位是PT)，默认100                           |
-| fee_limit                             | long                  | 选填，交易花费的手续费(单位是PT)，默认1000000                |
+| gas_price                             | long                  | 选填，打包费用 ，单位是星火萤(glowstone)，默认100            |
+| fee_limit                             | long                  | 选填，交易花费的手续费，单位是星火萤(glowstone)，默认1000000 |
 | domainId                              | int                   | 选填，指定域ID，默认主共识域id(0)                            |
 
 > 响应数据
@@ -2487,7 +2456,7 @@ BifTransactionGetInfoResponse *get_tx_cache_data(BifTransactionGetInfoRequest re
 
 ```c
 	// 初始化请求参数
-	char bif_url[64] = "http://172.17.6.84:30010";
+	char bif_url[64] = "http://test.bifcore.bitfactory.cn";
     BifBatchGasSendRequest req_batch_gas_send;
     BifTransactionSubmitResponse *res_gas_send;
     memset(&req_batch_gas_send, 0, sizeof(BifBatchGasSendRequest));
@@ -2502,7 +2471,6 @@ BifTransactionGetInfoResponse *get_tx_cache_data(BifTransactionGetInfoRequest re
     strcpy(req_batch_gas_send.private_key, "priSPKir4tnCmj6wmBxyaL2ZuAF5TKpf81mYRv4LbeGTGWRjrr");
 
     res_gas_send = batch_gas_send(req_batch_gas_send, bif_url);
-    //res_gas_send = gas_send(req_batch_gas_send, bif_url);
     if(res_gas_send->baseResponse.code != 0)
         printf("code:%d,msg:%s\n",res_gas_send->baseResponse.code,res_gas_send->baseResponse.msg);
     else
@@ -2582,7 +2550,7 @@ BifBlockGetNumberResponse *get_block_number(BifBlockGetTransactionsRequest req, 
 
 ```c
 	// 调用getBlockNumber接口
-	char bif_url[64] = "http://172.17.6.84:30010"; 
+	char bif_url[64] = "http://test.bifcore.bitfactory.cn"; 
     BifBlockGetTransactionsRequest req;
     BifBlockGetNumberResponse *res;
     memset(&req, 0 ,sizeof(req));    
@@ -2664,7 +2632,7 @@ BifBlockGetTransactionsResponse *get_transactions(BifBlockGetTransactionsRequest
 
 ```c
 	// 初始化请求参数
-	char bif_url[64] = "http://172.17.6.84:30010"; 
+	char bif_url[64] = "http://test.bifcore.bitfactory.cn"; 
 	BifBlockGetTransactionsRequest req_tranction;
     BifBlockGetTransactionsResponse *res_tranction;
     memset(&req_tranction, 0, sizeof(BifBlockGetTransactionsRequest));
@@ -2726,7 +2694,7 @@ BifBlockGetInfoResponse *get_block_info(BifBlockGetInfoRequest req, const char* 
 
 ```c
 	// 初始化请求参数
-	char bif_url[64] = "http://172.17.6.84:30010"; 
+	char bif_url[64] = "http://test.bifcore.bitfactory.cn"; 
 	BifBlockGetInfoRequest req_block_get_info;
     BifBlockGetInfoResponse *res_block_get_info;
     memset(&req_block_get_info, 0, sizeof(BifBlockGetInfoRequest));
@@ -2734,7 +2702,6 @@ BifBlockGetInfoResponse *get_block_info(BifBlockGetInfoRequest req, const char* 
     req_block_get_info.block_number = 11500;
     req_block_get_info.domainid = 0;
     res_block_get_info = get_block_info(req_block_get_info, bif_url);
-    //printf("resBlockGetInfo all:%s\n", resBlockGetInfo->value);
     if(res_block_get_info->baseResponse.code != 0)
         printf("code:%d,msg:%s\n",res_block_get_info->baseResponse.code,res_block_get_info->baseResponse.msg);
     else
@@ -2813,7 +2780,7 @@ BifBlockGetLatestInfoResponse *get_block_latest_info(BifBlockGetLatestInfoReques
 
 ```c
 	//调用get_block_latest_info 接口
-	char bif_url[64] = "http://172.17.6.84:30010"; 
+	char bif_url[64] = "http://test.bifcore.bitfactory.cn"; 
 	BifBlockGetLatestInfoRequest req_block_get_latest_info;
     BifBlockGetLatestInfoResponse *res_block_get_latest_info;
     memset(&req_block_get_latest_info, 0, sizeof(BifBlockGetLatestInfoRequest));
@@ -2895,7 +2862,7 @@ BifBlockGetValidatorsResponse *get_validators(BifBlockGetValidatorsRequest req, 
 ```c
 	// 初始化请求参数
 	//查询指定区块高度的validator信息
-	char bif_url[64] = "http://172.17.6.84:30010"; 
+	char bif_url[64] = "http://test.bifcore.bitfactory.cn"; 
     BifBlockGetValidatorsRequest req_get_validators;
     BifBlockGetValidatorsResponse *res_get_validators;
     memset(&req_get_validators, 0, sizeof(BifBlockGetValidatorsRequest));
@@ -3011,7 +2978,7 @@ BifBlockGetLatestValidatorsResponse * get_latest_validators(BifBlockGetValidator
 
 ```c
 	//调用 get_latest_validators 接口
-	char bif_url[64] = "http://172.17.6.84:30010";
+	char bif_url[64] = "http://test.bifcore.bitfactory.cn";
 	BifBlockGetValidatorsRequest req_latest_validators;
     BifBlockGetLatestValidatorsResponse *res_latest_validators;
     memset(&req_latest_validators, 0, sizeof(BifBlockGetValidatorsRequest));

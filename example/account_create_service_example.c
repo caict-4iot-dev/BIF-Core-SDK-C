@@ -21,14 +21,11 @@
  */
 
 #include "account_service.h"
-// #include "block_service.h"
-//  #include "general.h"
-//  #include "sdk_error.h"
 #include <stdio.h>
 #include <string.h>
 
 int main(int argc, char **argv) {
-  char bif_url[64] = "http://172.17.6.84:30010";
+  char bif_url[64] = "http://test.bifcore.bitfactory.cn";
 
   // 创建账户
   BifAccountResponse *res_create_account;

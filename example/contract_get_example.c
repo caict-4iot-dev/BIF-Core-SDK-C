@@ -25,13 +25,12 @@
 #include <string.h>
 
 int main(int argc, char **argv) {
-  char bif_url[64] = "http://172.17.6.84:30010";
+  char bif_url[64] = "http://test.bifcore.bitfactory.cn";
 
   // 合约模块-根据address domainid获取合约地址是否可用接口
   BifContractCheckValidRequest req_check_contract_addr;
   BifContractCheckValidResponse *res_contract_check_addr;
   memset(&req_check_contract_addr, 0, sizeof(BifContractCheckValidRequest));
-  // req_check_contract_addr.domainid = 21;
   strcpy(req_check_contract_addr.contract_address,
          "did:bid:efoyBUQzHSCeCj3VQk4uSxiZW9GRYcJv");
   res_contract_check_addr =
@@ -64,7 +63,7 @@ int main(int argc, char **argv) {
   BifContractGetAddressRequest req_contract_addr;
   BifContractGetInfoResponse *res_contract_addr;
   memset(&req_contract_addr, 0, sizeof(BifContractGetAddressRequest));
-  // req_contract_addr.domainid = 21;
+  
   // hash根据实际节点交易生成的值即可
   char hash_test[] =
       "2f25e770b7ede0966a920cc91503d5354be0b87e2cb3d237869449cd4290101f";
