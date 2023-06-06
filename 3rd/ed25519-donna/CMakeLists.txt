@@ -3,10 +3,10 @@
 set(LIB_BIFCHAIN_ED25519 bifchain_ed25519)
 set(BIFCHAIN_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(
-	/home/zhangzhiliang/test/openssl/build/include
+	${CMAKE_CURRENT_SOURCE_DIR}/../openssl/build/include
 )
 link_directories(
-	/home/zhangzhiliang/test/openssl/build/lib
+	${CMAKE_CURRENT_SOURCE_DIR}/../openssl/build/lib
 )
 set(DEPENDS_LIBS crypto ssl)
 aux_source_directory(${BIFCHAIN_SRC_DIR} ED25519_SRC)

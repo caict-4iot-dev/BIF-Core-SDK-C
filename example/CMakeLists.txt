@@ -8,7 +8,7 @@ include_directories(
 link_directories(
     ${BIFCHAIN_SRC_MAIN_DIR}/../build/lib
 )
-set(DEPENDS_LIBS bifcore_sdk_clang dl pthread)
+set(DEPENDS_LIBS bifcore_sdk_clang dl pthread z)
 
 add_executable(account_create_service_example account_create_service_example.c)
 target_link_libraries(account_create_service_example ${DEPENDS_LIBS})
